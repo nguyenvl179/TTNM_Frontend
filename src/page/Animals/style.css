@@ -1,0 +1,107 @@
+#detail-product {
+  padding: 16px;
+}
+#datail-product .list_image-product {
+  display: flex;
+  flex-grow: 4;
+}
+.img-product {
+  max-width: 400px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.img {
+  display: flex;
+  flex-grow: 4;
+}
+.name-product {
+  word-spacing: 10px;
+}
+.name-product h2 {
+  font-weight: bold;
+}
+.desc-product {
+  text-align: justify;
+  padding: 20px 0;
+  border-top: 2px black dashed;
+  border-bottom: 2px black dashed;
+  font-size: large;
+}
+.money-product h4 {
+  color: #0000FF;
+  font: larger;
+}
+.color-product {
+  display: flex;
+  overflow-x: auto;
+  gap: 8px;
+  padding: 16px 10px;
+  border-bottom: 2px black dashed;
+}
+.size_quantity-product {
+  padding: 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 140px;
+}
+.quantity-product {
+  display: flex;
+  font-size: large;
+  gap: 4px;
+  padding: 16px 0;
+  font-weight: bold;
+  color: #0000FF;
+}
+.quantity-input {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  align-items: center;
+}
+.quantity-input .form-control {
+  width: 40px;
+  display: flex;
+  flex-wrap: nowrap;
+}
+.quantity-input .form-label {
+  display: flex;
+  flex-wrap: nowrap;
+  margin: 0;
+  font-weight: bolder;
+  color: #0000FF;
+}
+.number-control {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.quantity-product span {
+  color: black;
+}
+.cart-button {
+  width: 100%;
+  height: 45px;
+  font-weight: 700;
+  color: black;
+  background-color: #0000FF;
+  border: none;
+  border-radius: 0;
+}
+.username {
+  font-weight: 700;
+}
+.category-animal {
+  padding: 14px 0;
+}
+.phanbo-animal {
+  padding: 16px 0;
+  border-top: 1px #0000FF dashed;
+  border-bottom: 1px #0000FF dashed;
+}
+.name-animal {
+  display: flex;
+  flex-direction: column;
+}

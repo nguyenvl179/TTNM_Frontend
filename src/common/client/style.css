@@ -1,0 +1,33 @@
+#client-sidebar {
+  display: flex;
+  position: inherit;
+  top: 50px;
+  left: 0;
+  margin-left: 0;
+  justify-content: space-between;
+  padding: 30px;
+  overflow: auto;
+  margin: auto;
+}
+#client-sidebar::-webkit-scrollbar {
+  display: none;
+}
+.row .title-filter {
+  padding: 8px 0;
+}
+#content {
+  height: calc(100vh - 50px);
+  overflow: auto;
+  min-width: calc(100vw - 300px);
+  padding: 0;
+}
+#content::-webkit-scrollbar {
+  display: none;
+}
+.item-filter {
+  gap: 8px;
+}
+.item-filter:hover {
+  color: #0000FF;
+  font-weight: 500;
+}

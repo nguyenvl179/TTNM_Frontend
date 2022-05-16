@@ -1,0 +1,14 @@
+.header-content {
+  height: 150px;
+  background-color: whitesmoke;
+}
+.table-content {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  height: calc(100vh - 200px);
+  overflow: auto;
+}
+.table-content::-webkit-scrollbar {
+  display: none;
+}

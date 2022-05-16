@@ -1,0 +1,16 @@
+.list-nav a{
+    background-color: #0000FF;
+    color: white !important;
+    opacity: .5;
+    transition: .125s ease;
+}
+.list-nav a:hover, a:focus {
+    opacity: .8;
+    color: white;
+
+}
+.link-nav.active  {
+    opacity: 1;
+    color: white;
+
+}
