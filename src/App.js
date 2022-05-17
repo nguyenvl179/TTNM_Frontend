@@ -4,6 +4,8 @@ import AnimalManage from "./page/admin/Animal/AnimalManage";
 import Animal from "./page/Animals/Animal";
 import DetailAnimal from "./page/Animals/DetailAnimal";
 
+import AdminAnimalManage from "./page/admin/Animal/AnimalManage";
+
 function App() {
   return (
     <Routes>
@@ -14,6 +16,7 @@ function App() {
         path="/adminstrator/animals"
         element={access_token ? <AnimalManage /> : <Animal />}
       />
+      <Route path="/admin/" element={<AdminAnimalManage />} />
     </Routes>
   );
 }
