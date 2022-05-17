@@ -246,7 +246,8 @@ const FormAnimal = ({ data }) => {
     e.preventDefault()
 
     var formData = new FormData(document.getElementById('frmEditAnimal'));
-
+    formData.append("id_user", '1')
+    formData.append("id_dong_vat", data.id_dong_vat)
     AnimalService.updateAnimal(formData).then(res => {
       console.log(res)
     })
@@ -293,11 +294,7 @@ const FormAnimal = ({ data }) => {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete('http://localhost:8000/dong-vat/', id_dong_vat, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
+        axios.delete('http://localhost:8000/dong-vat/?id_dong_vat='+id_dong_vat)
           .then(res => {
             console.log(res);
             Swal.fire(
@@ -305,6 +302,7 @@ const FormAnimal = ({ data }) => {
               'Xóa thành công',
               'success'
             )
+            window.reload()
           }).catch(err => {
             console.log(err)
 
