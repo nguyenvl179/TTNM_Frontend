@@ -246,11 +246,6 @@ const FormAnimal = ({ data }) => {
     e.preventDefault()
 
     var formData = new FormData(document.getElementById('frmEditAnimal'));
-    formData.append("id_user", '1')
-    formData.append("id_dong_vat", data.id_dong_vat)
-    AnimalService.updateAnimal(formData).then(res => {
-      console.log(res)
-    })
 
     axios.put('http://localhost:8000/dong-vat/', formData, {
       headers: {
@@ -326,6 +321,8 @@ const FormAnimal = ({ data }) => {
         loop
       >
         {/* Ten Sinh Vat */}
+        <Form.Control type="hidden" name="id_dong_vat" value={data.id_dong_vat} />
+        <Form.Control type="hidden" name="id_user" value={'1'} />
         <SwiperSlide>
           <h4>Thông tin</h4>
           <Form.Group>
