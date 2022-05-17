@@ -302,7 +302,7 @@ const FormAnimal = ({ data }) => {
               'Xóa thành công',
               'success'
             )
-            window.reload()
+            window.location.reload();
           }).catch(err => {
             console.log(err)
 
