@@ -41,7 +41,19 @@ export default function AnimalManage() {
         .then((res) => {
           if (res === 200) {
             setIsSuccess("Thành công");
-          } else setIsSuccess("Thất bại");
+            Swal.fire(
+              'Success!',
+              'Đọc và nhập dữ liệu thành công',
+              'success'
+            )
+          } else {
+            setIsSuccess("Thất bại");
+            Swal.fire(
+              'Fail!',
+              'Nhập dữ liệu thất bại',
+              'error'
+            )
+          }
         })
         .then(() =>
           setInterval(() => {
@@ -247,7 +259,23 @@ const FormAnimal = ({ data }) => {
 
     var formData = new FormData(document.getElementById('frmEditAnimal'));
 
-    axios.put('http://localhost:8000/dong-vat/', formData, {
+    let currentDate = new Date(input.ngay_thu_mau)
+
+    // var currentDate = dateStr.toLocaleDateString()
+
+    var date = currentDate.getDate();
+    var month = currentDate.getMonth(); //Be careful! January is 0 not 1
+    var year = currentDate.getFullYear();
+    var new_ngay_thu_mau = year + "-" + (month + 1) + "-" + date;
+
+    formData.set('ngay_thu_mau', new_ngay_thu_mau) 
+
+    var object = {};
+    formData.forEach((value, key) => object[key] = value);
+    var json = JSON.stringify(object);
+
+
+    axios.put('http://localhost:8000/dong-vat/', json, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -259,6 +287,7 @@ const FormAnimal = ({ data }) => {
           'Cập nhật thành công',
           'success'
         )
+        
       }).catch(err => {
         console.log(err)
 
@@ -289,7 +318,7 @@ const FormAnimal = ({ data }) => {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete('http://localhost:8000/dong-vat/?id_dong_vat='+id_dong_vat)
+        axios.delete('http://localhost:8000/dong-vat/?id_dong_vat=' + id_dong_vat)
           .then(res => {
             console.log(res);
             Swal.fire(
