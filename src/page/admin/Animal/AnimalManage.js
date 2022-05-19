@@ -290,7 +290,7 @@ const FormAnimal = ({ data }) => {
     var date = currentDate.getDate();
     var month = currentDate.getMonth(); //Be careful! January is 0 not 1
     var year = currentDate.getFullYear();
-    var new_ngay_thu_mau = year + "-" + (month + 1) + "-" + date;
+    var new_ngay_thu_mau = year + "-" + ("0" + (month + 1)).slice(-2) + "-" + date;
 
     formData.set('ngay_thu_mau', new_ngay_thu_mau)
 
@@ -575,8 +575,8 @@ const FormCreateAnimal = () => {
     ten_khoa_hoc: '',
     ten_tieng_viet: '',
     ten_dia_phuong: '',
-    ngay_thu_mau: date.getFullYear()+'-'+("0" + (date.getMonth() + 1)).slice(-2)+'-'+date.getDate()+'T00:00',
-    dia_diem:  '',
+    ngay_thu_mau: date.getFullYear() + '-' + ("0" + (date.getMonth() + 1)).slice(-2) + '-' + date.getDate() + 'T00:00',
+    dia_diem: '',
     nguoi_thu_mau: '',
     hinh_thai: '',
     sinh_thai: ''
@@ -608,7 +608,7 @@ const FormCreateAnimal = () => {
     var date = currentDate.getDate();
     var month = currentDate.getMonth(); //Be careful! January is 0 not 1
     var year = currentDate.getFullYear();
-    var new_ngay_thu_mau = year + "-" + (month + 1) + "-" + date;
+    var new_ngay_thu_mau = year + "-" + ("0" + (month + 1)).slice(-2) + "-" + date;
 
     formData.set('ngay_thu_mau', new_ngay_thu_mau)
 
@@ -616,17 +616,20 @@ const FormCreateAnimal = () => {
     formData.forEach((value, key) => object[key] = value);
     var json = JSON.stringify(object);
 
-
+    // AnimalService.createAnimal(json)
+    const access_token = localStorage.getItem("accessToken");
     axios.post('http://localhost:8000/dong-vat/', json, {
       headers: {
+        Authorization: `Bearer ${access_token}`,
         "Content-Type": "application/json",
+        accept: "*",
       },
     })
       .then(res => {
         console.log(res);
         Swal.fire(
           'Create!',
-          'Thêm thành công',
+          'Thêm động vật mới thành công',
           'success'
         )
 
@@ -635,7 +638,7 @@ const FormCreateAnimal = () => {
 
         Swal.fire(
           'Fail!',
-          'Thêm thất bại',
+          'Thêm động vật mới thất bại',
           'error'
         )
       })
@@ -675,7 +678,7 @@ const FormCreateAnimal = () => {
           </Form.Group>
           <Form.Group>
             <Form.Label>Địa điểm</Form.Label>
-            <Form.Control name="dia_diem" required value={input.dia_diem} onChange={handleChange}/>
+            <Form.Control name="dia_diem" required value={input.dia_diem} onChange={handleChange} />
           </Form.Group>
           <Form.Group>
             <Form.Label>Ngày thu mẫu</Form.Label>
@@ -683,7 +686,7 @@ const FormCreateAnimal = () => {
           </Form.Group>
           <Form.Group>
             <Form.Label>Người thu mẫu</Form.Label>
-            <Form.Control name="nguoi_thu_mau" required value={input.nguoi_thu_mau} onChange={handleChange}/>
+            <Form.Control name="nguoi_thu_mau" required value={input.nguoi_thu_mau} onChange={handleChange} />
           </Form.Group>
         </SwiperSlide>
 

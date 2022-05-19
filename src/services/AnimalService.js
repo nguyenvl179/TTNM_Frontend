@@ -1,5 +1,6 @@
 import { access_token } from "../config/AuthConfig";
 import { axiosInstance } from "./config";
+import Swal from 'sweetalert2';
 
 class AnimalService {
   async getAllAnimal() {
@@ -8,25 +9,43 @@ class AnimalService {
       .then((res) => res)
       .catch((err) => err);
   }
+  async createAnimal(data) {
+    return await axiosInstance
+      .post("/dong-vat")
+      .then((res) => {
+        Swal.fire(
+          'Create!',
+          'Thêm thành công',
+          'success'
+        )
+      })
+      .catch((err) => {
+        Swal.fire(
+          'Fail!',
+          'Thêm thất bại',
+          'error'
+        )
+      });
+  }
   async updateAnimal(info) {
     return await axiosInstance
       .put("/dong-vat/", info, {
         headers: {
           "Content-Type": "application/json",
         },
-      }) 
-        .then((res) => res)
-        .catch((err) => err);
+      })
+      .then((res) => res)
+      .catch((err) => err);
   }
   async deleteAnimal(id) {
     return await axiosInstance
-      .delete("/dong-vat/", {id_dong_vat: id}, {
+      .delete("/dong-vat/", { id_dong_vat: id }, {
         headers: {
           "Content-Type": "application/json",
         },
-      }) 
-        .then((res) => res)
-        .catch((err) => err);
+      })
+      .then((res) => res)
+      .catch((err) => err);
   }
   async getDetailAnimal(id) {
     return await axiosInstance
