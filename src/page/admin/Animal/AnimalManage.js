@@ -30,6 +30,7 @@ export default function AnimalManage() {
   const [fileSelect, setFileSelect] = useState();
   const [isSuccess, setIsSuccess] = useState("");
 
+
   useEffect(() => {
     AnimalService.getAllAnimal().then((res) => setAnimal(res.data));
   }, []);
@@ -63,6 +64,11 @@ export default function AnimalManage() {
   }, [fileSelect]);
 
 
+  const [createModal, setCreateModal] = useState(false);
+
+  const showModalCreateAnimal = () => setCreateModal(true)
+  const closeModalCreateAnimal = () => setCreateModal(false)
+
 
   return (
     <Container fluid className="m-0 p-0">
@@ -80,6 +86,24 @@ export default function AnimalManage() {
       <Container id="content" fluid className="d-flex ml-0">
         <Sidebar />
         <Container fluid>
+          <Button onClick={() => showModalCreateAnimal()} >Add +</Button>
+
+          <Modal show={createModal} onHide={closeModalCreateAnimal} size="md" centered>
+            <Modal.Header>Thêm động vật mới</Modal.Header>
+            <Modal.Body>
+              <Container className="text-center">
+                <Row>
+                  <Container style={{ width: 400 }}>
+                  </Container>
+                </Row>
+                <Row>
+                  <FormCreateAnimal />
+                </Row>
+              </Container>
+            </Modal.Body>
+          </Modal>
+
+          <hr />
           <div>Nhập liệu file excel: </div>
           <Form.Control
             type="file"
@@ -268,7 +292,7 @@ const FormAnimal = ({ data }) => {
     var year = currentDate.getFullYear();
     var new_ngay_thu_mau = year + "-" + (month + 1) + "-" + date;
 
-    formData.set('ngay_thu_mau', new_ngay_thu_mau) 
+    formData.set('ngay_thu_mau', new_ngay_thu_mau)
 
     var object = {};
     formData.forEach((value, key) => object[key] = value);
@@ -287,7 +311,7 @@ const FormAnimal = ({ data }) => {
           'Cập nhật thành công',
           'success'
         )
-        
+
       }).catch(err => {
         console.log(err)
 
@@ -533,3 +557,245 @@ const FormAnimal = ({ data }) => {
     </Form>
   );
 };
+
+const FormCreateAnimal = () => {
+  const [gioi, setGioi] = useState([]);
+  const [nganh, setNganh] = useState([]);
+  const [lop, setLop] = useState([]);
+  const [bo, setBo] = useState([]);
+  const [ho, setHo] = useState([]);
+
+  const [phanBo, setPhanBo] = useState([]);
+  const [sinhCanh, setSinhCanh] = useState([]);
+  const [giaTri, setGiaTri] = useState([]);
+  const [ttMauVat, setTTMauVat] = useState([]);
+  const [ttBaoTon, setTTBaoTon] = useState([]);
+  const date = new Date()
+  const [input, setInput] = useState({
+    ten_khoa_hoc: '',
+    ten_tieng_viet: '',
+    ten_dia_phuong: '',
+    ngay_thu_mau: date.getFullYear()+'-'+("0" + (date.getMonth() + 1)).slice(-2)+'-'+date.getDate()+'T00:00',
+    dia_diem:  '',
+    nguoi_thu_mau: '',
+    hinh_thai: '',
+    sinh_thai: ''
+  });
+
+  useEffect(() => {
+    GioiService.getGioi().then((res) => setGioi(res));
+    NganhService.getNganh().then((res) => setNganh(res));
+    LopService.getLop().then((res) => setLop(res));
+    BoService.getBo().then((res) => setBo(res));
+    HoService.getHo().then((res) => setHo(res));
+
+    OtherService.getSinhCanh().then((res) => setSinhCanh(res));
+    OtherService.getPhanBo().then((res) => setPhanBo(res));
+    OtherService.getGiaTri().then((res) => setGiaTri(res));
+    OtherService.ttMauVat().then((res) => setTTMauVat(res));
+    OtherService.ttBaoTon().then((res) => setTTBaoTon(res));
+  }, []);
+
+  const submitCreateAnimal = (e) => {
+    e.preventDefault()
+
+    var formData = new FormData(document.getElementById('frmCreateAnimal'));
+
+    let currentDate = new Date(input.ngay_thu_mau)
+
+    // var currentDate = dateStr.toLocaleDateString()
+
+    var date = currentDate.getDate();
+    var month = currentDate.getMonth(); //Be careful! January is 0 not 1
+    var year = currentDate.getFullYear();
+    var new_ngay_thu_mau = year + "-" + (month + 1) + "-" + date;
+
+    formData.set('ngay_thu_mau', new_ngay_thu_mau)
+
+    var object = {};
+    formData.forEach((value, key) => object[key] = value);
+    var json = JSON.stringify(object);
+
+
+    axios.post('http://localhost:8000/dong-vat/', json, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(res => {
+        console.log(res);
+        Swal.fire(
+          'Create!',
+          'Thêm thành công',
+          'success'
+        )
+
+      }).catch(err => {
+        console.log(err)
+
+        Swal.fire(
+          'Fail!',
+          'Thêm thất bại',
+          'error'
+        )
+      })
+  }
+
+  function handleChange(evt) {
+    const value = evt.target.value;
+    setInput({
+      ...input,
+      [evt.target.name]: value
+    });
+  }
+
+  return (
+    <Form id="frmCreateAnimal" onSubmit={submitCreateAnimal}>
+      <Swiper
+        navigation
+        slidesPerView={1}
+        spaceBetween={8}
+        modules={[Navigation]}
+        loop
+      >
+        {/* Ten Sinh Vat */}
+        <SwiperSlide>
+          <h4>Thông tin</h4>
+          <Form.Group>
+            <Form.Label>Tên khoa học</Form.Label>
+            <Form.Control name="ten_khoa_hoc" required value={input.ten_khoa_hoc} onChange={handleChange} />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Tên tiếng việt</Form.Label>
+            <Form.Control name="ten_tieng_viet" required value={input.ten_tieng_viet} onChange={handleChange} />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Tên địa phương</Form.Label>
+            <Form.Control name="ten_dia_phuong" required value={input.ten_dia_phuong} onChange={handleChange} />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Địa điểm</Form.Label>
+            <Form.Control name="dia_diem" required value={input.dia_diem} onChange={handleChange}/>
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Ngày thu mẫu</Form.Label>
+            <Form.Control type="datetime-local" name="ngay_thu_mau" required value={input.ngay_thu_mau} onChange={handleChange} />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Người thu mẫu</Form.Label>
+            <Form.Control name="nguoi_thu_mau" required value={input.nguoi_thu_mau} onChange={handleChange}/>
+          </Form.Group>
+        </SwiperSlide>
+
+        {/* Dac Diem */}
+        <SwiperSlide>
+          <h4>Thông tin</h4>
+          <Form.Group>
+            <Form.Label>Giới</Form.Label>
+            <Form.Select name="id_gioi" >
+              {gioi ? gioi.map(gioi => {
+                return <option value={gioi.id_gioi}>{gioi.name}</option>
+              }
+              ) : null}
+            </Form.Select>
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Ngành</Form.Label>
+            <Form.Select name="id_nganh" >
+              {nganh && nganh.map(nganh => {
+                return <option key={'nganh-' + nganh.id_nganh} value={nganh.id_nganh}>{nganh.name}</option>
+              }
+              )}
+            </Form.Select>
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Lớp</Form.Label>
+            <Form.Select name="id_lop" >
+              {lop && lop.map(lop => {
+                return <option key={'lop-' + lop.id_lop} value={lop.id_lop}>{lop.name}</option>
+              }
+              )}
+            </Form.Select>
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Bộ</Form.Label>
+            <Form.Select name="id_bo" >
+              {bo && bo.map(bo => {
+                return <option key={'bo-' + bo.id_bo} value={bo.id_bo}>{bo.name}</option>
+              }
+              )}
+            </Form.Select>
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Họ</Form.Label>
+            <Form.Select name="id_ho" >
+              {ho && ho.map(ho => {
+                return <option key={'ho-' + ho.id_ho} value={ho.id_ho}>{ho.name}</option>
+              }
+              )}
+            </Form.Select>
+          </Form.Group>
+        </SwiperSlide>
+
+        {/* Phan Bo */}
+        <SwiperSlide>
+          <h4>Thông tin</h4>
+          <Form.Group>
+            <Form.Label>Phân bố</Form.Label>
+            <Form.Select name="id_phan_bo" >
+              {phanBo && phanBo.map(phanBo => {
+                return <option key={'phanbo-' + phanBo.id_phan_bo} value={phanBo.id_phan_bo}>{phanBo.name}</option>
+              }
+              )}
+            </Form.Select>
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Tình trạng mẫu vật</Form.Label>
+            <Form.Select name="id_tinh_trang_mau_vat" >
+              {ttMauVat && ttMauVat.map(ttMauVat => {
+                return <option key={'ttMauVat-' + ttMauVat.id_tinh_trang_mau_vat} value={ttMauVat.id_tinh_trang_mau_vat}>{ttMauVat.name}</option>
+              }
+              )}
+            </Form.Select>
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Tình trạng bảo tồn</Form.Label>
+            <Form.Select name="id_tinh_trang_bao_ton" >
+              {ttBaoTon && ttBaoTon.map(ttBaoTon => {
+                return <option key={'ttBaoTon-' + ttBaoTon.id_tinh_trang_bao_ton} value={ttBaoTon.id_tinh_trang_bao_ton}>{ttBaoTon.name}</option>
+              }
+              )}
+            </Form.Select>
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Sinh cảnh</Form.Label>
+            <Form.Select name="id_sinh_canh" >
+              {sinhCanh && sinhCanh.map(sinhCanh => {
+                return <option key={'sinhCanh-' + sinhCanh.id_sinh_canh} value={sinhCanh.id_sinh_canh}>{sinhCanh.name}</option>
+              }
+              )}
+            </Form.Select>
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Giá trị</Form.Label>
+            <Form.Select name="id_gia_tri" >
+              {sinhCanh && giaTri.map(giaTri => {
+                return <option key={'giaTri-' + giaTri.id_gia_tri} value={giaTri.id_gia_tri}>{giaTri.name}</option>
+              }
+              )}
+            </Form.Select>
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Hình thái</Form.Label>
+            <Form.Control name="hinh_thai" as="textarea" required value={input.hinh_thai} onChange={handleChange} />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Sinh thái</Form.Label>
+            <Form.Control name="sinh_thai" as="textarea" required value={input.sinh_thai} onChange={handleChange} />
+          </Form.Group>
+        </SwiperSlide>
+        <Button type="submit" form="frmCreateAnimal">Thêm</Button>
+      </Swiper>
+    </Form>
+  );
+}
